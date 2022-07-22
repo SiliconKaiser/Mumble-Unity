@@ -97,7 +97,7 @@ namespace Mumble
             // for 30 seconds it will close the connection
             _tcpTimer = new System.Timers.Timer(MumbleConstants.PING_INTERVAL_MS);
             _tcpTimer.Elapsed += SendPing;
-            _tcpTimer.Enabled = true; 
+            _tcpTimer.Enabled = true;
             _processThread.Start();
         }
 
@@ -106,13 +106,13 @@ namespace Mumble
             lock (_ssl)
             {
                 //if (mt != MessageType.Ping && mt != MessageType.UDPTunnel)
-                    //Debug.Log("Sending " + mt + " message");
+                //Debug.Log("Sending " + mt + " message");
                 //_writer.Write(IPAddress.HostToNetworkOrder((Int16) mt));
                 //Serializer.SerializeWithLengthPrefix(_ssl, message, PrefixStyle.Fixed32BigEndian);
                 Int16 messageType = (Int16)mt;
 
                 // UDP Tunnels have their own way in which they handle serialization
-                if(mt == MessageType.UDPTunnel)
+                if (mt == MessageType.UDPTunnel)
                 {
                     UDPTunnel udpTunnel = message as UDPTunnel;
                     Int32 messageSize = (Int32)udpTunnel.Packet.Length;
@@ -130,7 +130,7 @@ namespace Mumble
                     messageStream.Position = 0;
                     _writer.Write(messageStream.ToArray());
                 }
-                
+
                 /*
                 StringBuilder sb = new StringBuilder();
                 byte[] msgArray = messageStream.ToArray();
@@ -229,7 +229,6 @@ namespace Mumble
                             _mumbleClient.ServerConfig = Serializer.DeserializeWithLengthPrefix<ServerConfig>(_ssl,
                                 PrefixStyle.Fixed32BigEndian);
                             //Debug.Log("Sever config = " + _mumbleClient.ServerConfig);
-                            Debug.Log("Mumble is Connected");
                             _validConnection = true; // handshake complete
                             break;
                         case MessageType.SuggestConfig:
@@ -305,7 +304,7 @@ namespace Mumble
                         Debug.LogError("IO Exception: " + ex);
                         _mumbleClient.OnConnectionDisconnect();
                     }
-                   //These just means the app stopped, it's ok
+                    //These just means the app stopped, it's ok
                     else if (ex is ObjectDisposedException) { }
                     else if (ex is ThreadAbortException) { }
                     else
@@ -326,7 +325,7 @@ namespace Mumble
                 _mumbleClient.CryptSetup = cryptSetup;
                 _mumbleClient.ConnectUdp();
             }
-            else if(cryptSetup.ServerNonce != null)
+            else if (cryptSetup.ServerNonce != null)
             {
                 Debug.Log("Updating server nonce");
                 _updateOcbServerNonce(cryptSetup.ServerNonce);
@@ -343,22 +342,22 @@ namespace Mumble
             // Signal thread that it's time to shut down
             _running = false;
 
-            if(_ssl != null)
+            if (_ssl != null)
                 _ssl.Close();
             _ssl = null;
-            if(_tcpTimer != null)
+            if (_tcpTimer != null)
                 _tcpTimer.Close();
             _tcpTimer = null;
-            if(_processThread != null)
+            if (_processThread != null)
                 _processThread.Interrupt();
             _processThread = null;
-            if(_reader != null)
+            if (_reader != null)
                 _reader.Close();
             _reader = null;
-            if(_writer != null)
+            if (_writer != null)
                 _writer.Close();
             _writer = null;
-            if(_tcpClient != null)
+            if (_tcpClient != null)
                 _tcpClient.Close();
         }
 
@@ -367,7 +366,7 @@ namespace Mumble
             if (_validConnection)
             {
                 var ping = new MumbleProto.Ping();
-                ping.Timestamp = (ulong) (DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks);
+                ping.Timestamp = (ulong)(DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks);
                 //Debug.Log("Sending ping");
                 SendMessage(MessageType.Ping, new MumbleProto.Ping());
             }

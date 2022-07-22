@@ -12,7 +12,8 @@ using UnityEditor;
 using System.Collections;
 using Mumble;
 
-public class MumbleTester : MonoBehaviour {
+public class MumbleTester : MonoBehaviour
+{
 
     // Basic mumble audio player
     public GameObject MyMumbleAudioPlayerPrefab;
@@ -31,9 +32,10 @@ public class MumbleTester : MonoBehaviour {
     public string Password = "1passwordHere!";
     public string ChannelToJoin = "";
 
-	void Start () {
+    void Start()
+    {
 
-        if(HostName == "1.2.3.4")
+        if (HostName == "1.2.3.4")
         {
             Debug.LogError("Please set the mumble host name to your mumble server");
             return;
@@ -55,7 +57,7 @@ public class MumbleTester : MonoBehaviour {
         else
         {
             _mumbleClient.Connect(Username, Password);
-            if(MyMumbleMic != null)
+            if (MyMumbleMic != null)
             {
                 _mumbleClient.AddMumbleMic(MyMumbleMic);
                 if (SendPosition)
@@ -101,7 +103,7 @@ public class MumbleTester : MonoBehaviour {
         Debug.Log("Will now connect");
         _mumbleClient.Connect(Username, Password);
         yield return null;
-        if(MyMumbleMic != null)
+        if (MyMumbleMic != null)
         {
             _mumbleClient.AddMumbleMic(MyMumbleMic);
             if (SendPosition)
@@ -147,9 +149,9 @@ public class MumbleTester : MonoBehaviour {
         {
             string[] micNames = Microphone.devices;
             // try to see if the desired mic is connected
-            for(int i = 0; i < micNames.Length; i++)
+            for (int i = 0; i < micNames.Length; i++)
             {
-                if(micNames[i] == micToConnect)
+                if (micNames[i] == micToConnect)
                 {
                     Debug.Log("Desired mic reconnected");
                     MyMumbleMic.MicNumberToUse = i;
@@ -163,7 +165,7 @@ public class MumbleTester : MonoBehaviour {
     void OnApplicationQuit()
     {
         Debug.LogWarning("Shutting down connections");
-        if(_mumbleClient != null)
+        if (_mumbleClient != null)
             _mumbleClient.Close();
     }
     IEnumerator UpdateEditorGraph()
@@ -189,7 +191,8 @@ public class MumbleTester : MonoBehaviour {
             numPacketsLost += numLostThisSample;
         }
     }
-	void Update () {
+    void Update()
+    {
         if (!_mumbleClient.ReadyToConnect)
             return;
         if (Input.GetKeyDown(KeyCode.S))
